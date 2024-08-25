@@ -133,8 +133,8 @@
             <ul>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Why Donate Blood</a></li>
-                <li><a href="#">Become A Donor</a></li>
-                <li><a href="#">Need Blood</a></li>
+                <li><a href="./donor.php">Become A Donor</a></li>
+                <li><a href="./need.php">Need Blood</a></li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
