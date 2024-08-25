@@ -57,7 +57,7 @@
         }
 
         .hero {
-            background: url('f1.jpg') no-repeat center center/cover;
+            background: url('bg.jpg') no-repeat center center/cover;
             color: #fff;
             padding: 150px 20px;
             text-align: center;
