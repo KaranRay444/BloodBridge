@@ -1,0 +1,232 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff5f5;
+    color: #333;
+}
+
+header {
+    background-color: #ff4c4c;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    color: #fff;
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin-right: 20px;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #ffe0e0;
+}
+
+.hero {
+    background: url('../images/bg.jpg') no-repeat center center/cover;    color: #fff;
+    padding: 150px 20px;
+    text-align: center;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #ff4c4c;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #cc3c3c;
+}
+
+.btn {
+    background-color: #ff4c4c;
+    color: whitesmoke;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: white;
+    color: #ff4c4c;
+    border-bottom: red 1px solid;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    color: red;
+    text-decoration: underline;
+}
+/* Why Donate Blood Section */
+.why {
+background-color: #f4f4f4;
+padding: 50px 20px;
+text-align: center;
+}
+
+.why .container {
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.why h2 {
+font-size: 36px;
+color: #c0392b;
+margin-bottom: 30px;
+text-transform: uppercase;
+}
+
+.why .boxes {
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+}
+
+.why .box {
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+margin: 15px;
+padding: 20px;
+width: 30%;
+min-width: 250px;
+}
+
+.why .box h3 {
+font-size: 24px;
+color: #e74c3c;
+margin-bottom: 15px;
+}
+
+.why .box p {
+font-size: 16px;
+line-height: 1.6;
+color: #333;
+}
+
+@media screen and (max-width: 768px) {
+.why .boxes {
+flex-direction: column;
+align-items: center;
+}
+html{
+scroll-behavior: smooth;
+}
+.why .box {
+width: 80%;
+}
+}
+/* Events Section */
+.events {
+    background: url('../images/img3.jpg') no-repeat center center/cover;background-color: #f4f4f4;
+padding: 50px 20px;
+text-align: center;
+}
+
+.events .container {
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.events h2 {
+font-size: 36px;
+color: #c0392b;
+margin-bottom: 30px;
+text-transform: uppercase;
+}
+
+.events .event-list {
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+}
+
+.events .event-box {
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+margin: 15px;
+padding: 20px;
+width: 30%;
+min-width: 250px;
+text-align: left;
+}
+
+.events .event-box h3 {
+font-size: 24px;
+color: #e74c3c;
+margin-bottom: 10px;
+}
+
+.events .event-box p {
+font-size: 16px;
+line-height: 1.6;
+color: #333;
+}
+
+@media screen and (max-width: 768px) {
+.events .event-list {
+flex-direction: column;
+align-items: center;
+}
+
+.events .event-box {
+width: 80%;
+}
+}
+
+
+
+footer {
+    background-color: #222;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
