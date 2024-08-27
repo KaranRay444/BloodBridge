@@ -75,14 +75,78 @@
         </div>
     </div>
 </section>
+<section id="get-in-touch" class="get-in-touch">
+    <div class="form_box">
+        <h2>Get in Touch</h2>
+        <p>We would love to hear from you! Please fill out the form below to send us a message.</p>
+        
+        <form action="php/contact.php" method="POST" class="contact-form">
+            <div class="form_field">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
 
+            <div class="form_field">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
+            <div class="form_field">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
 
-  
+            <div class="form_field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
 
-    <footer>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+</section>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="about-us">
+            <h4>About Us</h4>
+            <p>
+                We are a dedicated team committed to saving lives through efficient blood donation management. Our mission is to connect donors with those in need, ensuring that no one suffers due to a lack of blood availability.
+            </p>
+        </div>
+
+        <div class="contact-us">
+            <h4>Contact Us</h4>
+            <p>Email: contact@BloodBridge.com</p>
+            <p>Phone: +91 2223 4563 78</p>
+            <p>Address: 213 Health center ,Surat</p>
+        </div>
+
+        <div class="quick-links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#why_donate">Why Donate</a></li>
+                <li><a href="#get-in-touch">Get in Touch</a></li>
+            </ul>
+        </div>
+
+        <div class="social-media">
+            <h4>Follow Us</h4>
+            <ul>
+                <li><a href="#" class="social-icon facebook">Facebook</a></li>
+                <li><a href="#" class="social-icon twitter">Twitter</a></li>
+                <li><a href="#" class="social-icon instagram">Instagram</a></li>
+                <li><a href="#" class="social-icon linkedin">LinkedIn</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
         <p>&copy; 2024 Blood Bridge. All rights reserved.</p>
-    </footer>
+    </div>
+</footer>
+
 </body>
 
 </html>

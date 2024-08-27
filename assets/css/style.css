@@ -214,19 +214,205 @@ align-items: center;
 width: 80%;
 }
 }
-
-
-
-footer {
-    background-color: #222;
-    color: white;
-    padding: 20px 0;
+/* Get in Touch Section */
+.get-in-touch {
+    background-color: #ffffff;  /* Clean white background */
+    padding: 60px 20px;
     text-align: center;
-    margin-top: 40px;
+    border: 1px solid #e0e0e0;  /* Light border for definition */
+    border-radius: 8px;  /* Soft rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
 }
 
-footer p {
-    margin: 5px 0;
-    font-size: 14px;
-    line-height: 1.6;
+.get-in-touch .form_box {
+    max-width: 700px;
+    margin: 0 auto;
 }
+
+.get-in-touch h2 {
+    font-size: 32px;
+    color: #d32f2f;  /* Medical red for emphasis */
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.get-in-touch p {
+    font-size: 16px;
+    color: #555;  /* Darker grey for readability */
+    margin-bottom: 30px;
+}
+
+.get-in-touch .contact-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.get-in-touch .form_field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.get-in-touch .form_field label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.get-in-touch .form_field input,
+.get-in-touch .form_field textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;  /* Soft grey background for fields */
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.get-in-touch .form_field input:focus,
+.get-in-touch .form_field textarea:focus {
+    border-color: #d32f2f;  /* Consistent red border on focus */
+    background-color: #fff;  /* White background on focus */
+    outline: none;
+}
+
+.get-in-touch .submit-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #d32f2f;  /* Primary red for the button */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.get-in-touch .submit-btn:hover {
+    background-color: #b71c1c;  /* Darker red on hover */
+}
+
+@media (max-width: 600px) {
+    .get-in-touch h2 {
+        font-size: 28px;
+    }
+    
+    .get-in-touch .form_box {
+        width: 90%;
+    }
+}
+/* Footer Styling */
+.footer {
+    background-color: #2c3e50;  /* Dark background */
+    color: #ecf0f1;  /* Light text */
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 4px solid #d32f2f;  /* Red top border */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.footer-content > div {
+    flex: 1 1 200px;
+    margin-bottom: 20px;
+}
+
+.footer h4 {
+    font-size: 20px;
+    color: #ecf0f1;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.footer p,
+.footer a {
+    font-size: 16px;
+    color: #bdc3c7;
+    line-height: 1.6;
+    text-decoration: none;
+}
+
+.footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer li {
+    margin-bottom: 10px;
+}
+
+.footer a:hover {
+    color: #d32f2f;  /* Red hover effect */
+}
+
+.social-media ul {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.social-icon {
+    font-size: 18px;
+    color: #bdc3c7;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #d32f2f;
+    color: #fff;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid #bdc3c7;
+    padding-top: 10px;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    color: #bdc3c7;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-content > div {
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer p,
+    .footer a {
+        font-size: 14px;
+    }
+
+    .footer h4 {
+        font-size: 18px;
+    }
+}
+
+
+
+
