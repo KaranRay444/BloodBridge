@@ -1,5 +1,8 @@
+
 # BloodBridge
 Blood donation web-page
+<br><a href="bloodbridge2024.netlify.app"> Click to View Static webpage<a><br>
+
 <br>
 Home page 
 <br>
