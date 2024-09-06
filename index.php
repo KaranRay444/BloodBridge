@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +7,13 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>Blood Bridge</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="./donor.php">Become A Donor</a></li>
-                <li><a href="#why_donate">Why Donate Blood</a></li>
-                <li><a href="#events">Events</a></li>
-                <li><a href="./need.php">Need Blood</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
-    </header>
-
+    <?php include 'header.php'; ?>
     <section class="hero">
         <div class="hero-content">
             <h2>Blood Donation is a Great Act of Kindness</h2>
             <p>One pint of blood can save three lives. Be a donor, be a savior</p>
             <a href="#" class="btn">Join Now</a>
-            <a href="#" class="read-more">Read More</a>
+            <a href="#why_donate" class="read-more">Read More</a>
         </div>
     </section>
     <section id="why_donate" class="why">
@@ -85,17 +70,14 @@
                 <label for="name">Your Name</label>
                 <input type="text" id="name" name="name" required>
             </div>
-
             <div class="form_field">
                 <label for="email">Your Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
-
             <div class="form_field">
                 <label for="subject">Subject</label>
                 <input type="text" id="subject" name="subject" required>
             </div>
-
             <div class="form_field">
                 <label for="message">Message</label>
                 <textarea id="message" name="message" rows="5" required></textarea>
@@ -105,48 +87,6 @@
         </form>
     </div>
 </section>
-<footer class="footer">
-    <div class="footer-content">
-        <div class="about-us">
-            <h4>About Us</h4>
-            <p>
-                We are a dedicated team committed to saving lives through efficient blood donation management. Our mission is to connect donors with those in need, ensuring that no one suffers due to a lack of blood availability.
-            </p>
-        </div>
-
-        <div class="contact-us">
-            <h4>Contact Us</h4>
-            <p>Email: contact@BloodBridge.com</p>
-            <p>Phone: +91 2223 4563 78</p>
-            <p>Address: 213 Health center ,Surat</p>
-        </div>
-
-        <div class="quick-links">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#events">Events</a></li>
-                <li><a href="#why_donate">Why Donate</a></li>
-                <li><a href="#get-in-touch">Get in Touch</a></li>
-            </ul>
-        </div>
-
-        <div class="social-media">
-            <h4>Follow Us</h4>
-            <ul>
-                <li><a href="#" class="social-icon facebook">Facebook</a></li>
-                <li><a href="#" class="social-icon twitter">Twitter</a></li>
-                <li><a href="#" class="social-icon instagram">Instagram</a></li>
-                <li><a href="#" class="social-icon linkedin">LinkedIn</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 Blood Bridge. All rights reserved.</p>
-    </div>
-</footer>
-
+<?php include 'footer.php'; ?>
 </body>
-
 </html>
