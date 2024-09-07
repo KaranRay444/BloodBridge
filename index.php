@@ -12,7 +12,7 @@
         <div class="hero-content">
             <h2>Blood Donation is a Great Act of Kindness</h2>
             <p>One pint of blood can save three lives. Be a donor, be a savior</p>
-            <a href="#" class="btn">Join Now</a>
+            <a href="/BBMS/BloodBridge/php/donor.php" class="btn">Join Now</a>
             <a href="#why_donate" class="read-more">Read More</a>
         </div>
     </section>
