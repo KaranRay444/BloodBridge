@@ -6,7 +6,6 @@
     <title>Need Blood Form</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        /* Scoped CSS for the Need Blood form to prevent conflict */
         .need-blood-container * {
             margin: 0;
             padding: 0;
