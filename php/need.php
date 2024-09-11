@@ -32,7 +32,7 @@
         }
 
         .need-blood-header {
-            background-color: #2980b9;
+            background-color:  #ff4c4c;
             color: #fff;
             padding: 20px;
             text-align: center;
@@ -89,6 +89,37 @@
     </style>
 </head>
 <body>
+<?php
+// Include the database connection
+include('connect.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect and sanitize input data
+    $patientName = $conn->real_escape_string($_POST['patient-name']);
+    $bloodType = $conn->real_escape_string($_POST['blood-type']);
+    $hospitalName = $conn->real_escape_string($_POST['hospital-name']);
+    $doctorName = $conn->real_escape_string($_POST['doctor-name']);
+    $contact = $conn->real_escape_string($_POST['contact']);
+    $requiredDate = $conn->real_escape_string($_POST['required-date']);
+    $message = $conn->real_escape_string($_POST['message']);
+
+    // Prepare SQL query
+    $sql = "INSERT INTO need_blood (patient_name, blood_type, hospital_name, doctor_name, contact, required_date, message)
+            VALUES ('$patientName', '$bloodType', '$hospitalName', '$doctorName', '$contact', '$requiredDate', '$message')";
+
+    // Execute the query and handle errors
+    if ($conn->query($sql) === TRUE) {
+        echo "Blood request submitted successfully.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // Close the connection
+    $conn->close();
+}
+?>
+
+
 
 <?php include('../header.php'); ?>
 

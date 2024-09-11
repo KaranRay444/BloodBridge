@@ -31,6 +31,14 @@ header {
     margin-left: 20px;
 }
 
+.logo a {
+    text-decoration: none; 
+    outline: none;         
+    border: none;           
+}
+
+
+
 nav ul {
     list-style: none;
     display: flex;
@@ -77,8 +85,17 @@ nav ul li a:hover {
     margin-bottom: 20px;
     color: #ff4c4c;
 }
-
-.hero p {
+.read-more{
+    text-decoration: none; 
+    outline: none;         
+    border: none;  
+    color: #b00707;
+}
+.read-more:hover{
+    color: red ;
+    border-bottom:  whitesmoke 1px solid ;
+}
+.hero p{
     font-size: 18px;
     margin-bottom: 30px;
     color: #cc3c3c;
@@ -158,6 +175,7 @@ nav ul li a:hover {
 
 /* Events Section */
 .events {
+    
     background: url('../images/img3.jpg') no-repeat center center/cover;
     background-color: #f4f4f4;
     padding: 50px 20px;
@@ -376,8 +394,7 @@ nav ul li a:hover {
 }
 
 .social-icon:hover {
-    background-color: #d32f2f;
-    color: #fff;
+    color: #d32f2f;
 }
 
 .footer-bottom {

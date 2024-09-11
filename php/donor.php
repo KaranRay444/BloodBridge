@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,11 +33,14 @@
         }
 
         .donor-header {
-            background-color: #27ae60;
             color: #fff;
             padding: 20px;
             text-align: center;
+            background-image: url("/BBMS/BloodBridge/assets/images/banner.jpg");            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
+
 
         .donor-header h1 {
             margin-bottom: 10px;
@@ -73,7 +77,7 @@
 
         .submit-btn {
             width: 100%;
-            background-color: #27ae60;
+            background-color: #c0392b;
             color: white;
             padding: 15px;
             border: none;
@@ -84,95 +88,142 @@
         }
 
         .submit-btn:hover {
-            background-color: #218c52;
+            background-color: white;
+            border: 2px solid #c0392b;
+            color: red !important;
         }
     </style>
 </head>
+
 <body>
+<?php
+include('connect.php');
 
-<?php include('../header.php'); ?>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $name = $_POST['donor-name'];
+    $age = $_POST['donor-age'];
+    $bloodType = $_POST['blood-type'];
+    $gender = $_POST['donor-gender'];
+    $weight = $_POST['donor-weight'];
+    $contact = $_POST['contact-number'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $lastDonationDate = $_POST['last-donation-date'];
+    $message = $_POST['message'];
 
-<div class="donor-container">
-    <div class="donor-form">
-        <div class="donor-header">
-            <h1>Become a Donor</h1>
-            <p>Please fill out this form to register as a blood donor. Your details will be securely stored.</p>
-        </div>
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("INSERT INTO donors (name, age, blood_type, gender, weight, contact, email, address, last_donation_date, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+    if ($stmt === false) {
+        die("Prepare failed: " . htmlspecialchars($conn->error));
+    }
 
-        <div class="form-content">
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="donor-name">Full Name</label>
-                    <input type="text" id="donor-name" name="donor-name" placeholder="Enter your full name" required>
-                </div>
+    // Bind parameters
+    $stmt->bind_param("sississsss", $name, $age, $bloodType, $gender, $weight, $contact, $email, $address, $lastDonationDate, $message);
+    
+    // Execute the statement
+    if ($stmt->execute()) {
+        echo "New donor registered successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+}
+?>
 
-                <div class="form-group">
-                    <label for="donor-age">Age</label>
-                    <input type="number" id="donor-age" name="donor-age" placeholder="Enter your age" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="blood-type">Blood Type</label>
-                    <select id="blood-type" name="blood-type" required>
-                        <option value="" disabled selected>Select your blood type</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                </div>
 
-                <div class="form-group">
-                    <label for="donor-gender">Gender</label>
-                    <select id="donor-gender" name="donor-gender" required>
-                        <option value="" disabled selected>Select your gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+    <?php include('../header.php'); ?>
 
-                <div class="form-group">
-                    <label for="donor-weight">Weight (kg)</label>
-                    <input type="number" id="donor-weight" name="donor-weight" placeholder="Enter your weight in kg" required>
-                </div>
+    <div class="donor-container">
+        <div class="donor-form">
+            <div class="donor-header">
+                <h1>Become a Donor</h1>
+                <p>Please fill out this form to register as a blood donor. Your details will be securely stored.</p>
+            </div>
 
-                <div class="form-group">
-                    <label for="contact-number">Contact Number</label>
-                    <input type="tel" id="contact-number" name="contact-number" placeholder="Enter your contact number" required>
-                </div>
+            <div class="form-content">
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="donor-name">Full Name</label>
+                        <input type="text" id="donor-name" name="donor-name" placeholder="Enter your full name"
+                            required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
+                    <div class="form-group">
+                        <label for="donor-age">Age</label>
+                        <input type="number" id="donor-age" name="donor-age" placeholder="Enter your age" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address" placeholder="Enter your full address" required></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="blood-type">Blood Type</label>
+                        <select id="blood-type" name="blood-type" required>
+                            <option value="" disabled selected>Select your blood type</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="last-donation-date">Last Donation Date (if any)</label>
-                    <input type="date" id="last-donation-date" name="last-donation-date">
-                </div>
+                    <div class="form-group">
+                        <label for="donor-gender">Gender</label>
+                        <select id="donor-gender" name="donor-gender" required>
+                            <option value="" disabled selected>Select your gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="message">Additional Information (Optional)</label>
-                    <textarea id="message" name="message" placeholder="Enter any additional details"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="donor-weight">Weight (kg)</label>
+                        <input type="number" id="donor-weight" name="donor-weight" placeholder="Enter your weight in kg"
+                            required>
+                    </div>
 
-                <button type="submit" class="submit-btn">Submit</button>
-            </form>
+                    <div class="form-group">
+                        <label for="contact-number">Contact Number</label>
+                        <input type="tel" id="contact-number" name="contact-number"
+                            placeholder="Enter your contact number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" placeholder="Enter your full address" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last-donation-date">Last Donation Date (if any)</label>
+                        <input type="date" id="last-donation-date" name="last-donation-date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Additional Information (Optional)</label>
+                        <textarea id="message" name="message" placeholder="Enter any additional details"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<?php include('../footer.php'); ?>
+    <?php include('../footer.php'); ?>
 
 </body>
+
 </html>
