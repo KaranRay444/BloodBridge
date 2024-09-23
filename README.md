@@ -2,6 +2,10 @@
 A Blood Donation Webpage
 
 [**Click here to view the Full webpage**](https://bloodbridge.rf.gd/index.php)
+<br>
+[**Click here to manage Database **](https://bloodbridge.rf.gd/index.php/admin.php)
+
+
 
 ## Home Page
 ![Home Page](https://github.com/user-attachments/assets/7047845b-ade0-40b7-a706-3ccc122dd0d9)
