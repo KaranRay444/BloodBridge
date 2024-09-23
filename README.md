@@ -3,7 +3,8 @@ A Blood Donation Webpage
 
 [**Click here to view the Full webpage**](https://bloodbridge.rf.gd/index.php)
 <br>
-[**Click here to manage Database **](https://bloodbridge.rf.gd/index.php/admin.php)
+
+
 
 
 
