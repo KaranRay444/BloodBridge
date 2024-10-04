@@ -100,7 +100,6 @@
 include('connect.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
     $name = $_POST['donor-name'];
     $age = $_POST['donor-age'];
     $bloodType = $_POST['blood-type'];
@@ -112,24 +111,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastDonationDate = $_POST['last-donation-date'];
     $message = $_POST['message'];
 
-    // Prepare the SQL statement
     $stmt = $conn->prepare("INSERT INTO donors (name, age, blood_type, gender, weight, contact, email, address, last_donation_date, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
     if ($stmt === false) {
         die("Prepare failed: " . htmlspecialchars($conn->error));
     }
 
-    // Bind parameters
     $stmt->bind_param("sississsss", $name, $age, $bloodType, $gender, $weight, $contact, $email, $address, $lastDonationDate, $message);
     
-    // Execute the statement
     if ($stmt->execute()) {
         echo "New donor registered successfully";
     } else {
         echo "Error: " . $stmt->error;
     }
     
-    // Close the statement and connection
     $stmt->close();
     $conn->close();
 }

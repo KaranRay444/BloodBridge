@@ -28,7 +28,7 @@
         <div class="social-media">
             <h4>Follow Us</h4>
             <ul>
-                <li><a href="#" class="social-icon facebook">Facebook</a></li>
+                <li><a href="http://fb.com/bloodbridge" class="social-icon facebook">Facebook</a></li>
                 <li><a href="#" class="social-icon twitter">Twitter</a></li>
                 <li><a href="#" class="social-icon instagram">Instagram</a></li>
                 <li><a href="#" class="social-icon linkedin">LinkedIn</a></li>

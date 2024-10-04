@@ -1,7 +1,6 @@
 <?php
-include 'connect.php'; // Database connection
+include 'connect.php'; 
 
-// Fetch donors from the database
 $donors_result = $conn->query("SELECT * FROM donors");
 
 ?>

@@ -1,7 +1,6 @@
 <?php
-include 'connect.php'; // Database connection
+include 'connect.php'; 
 
-// Fetch messages from the need_blood table
 $messages_result = $conn->query("SELECT id, name, email, subject, message, created_at FROM messages");
 ?>
 

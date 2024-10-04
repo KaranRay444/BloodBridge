@@ -1,21 +1,11 @@
 <?php
-// Start session and check if admin is logged in
-//session_start();
-//if (!isset($_SESSION['admin_logged_in'])) {
-    //header('Location: index.php');
-  //  exit();
-//}
-
-// Database connection (replace with your actual database connection details)
 include 'connect.php';
 
-// Fetch data from the relevant tables
 $donors_result = $conn->query("SELECT * FROM donors");
 $requests_result = $conn->query("SELECT * FROM need_blood");
 $events_result = $conn->query("SELECT * FROM events");
 $messages_result = $conn->query("SELECT * FROM messages");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,23 +17,23 @@ $messages_result = $conn->query("SELECT * FROM messages");
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #081028;
         }
         .container {
             display: flex;
         }
-        /* Sidebar styles */
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #423a8e;
-            color: white;
+            background-color: #0a1330;
+            color: #ffffff;
             position: fixed;
         }
         .sidebar h2 {
             text-align: center;
             margin-top: 20px;
             margin-bottom: 20px;
+            color:#cf1b2b;
         }
         .sidebar ul {
             list-style-type: none;
@@ -60,18 +50,20 @@ $messages_result = $conn->query("SELECT * FROM messages");
             font-size: 16px;
         }
         .sidebar ul li a:hover {
-            background-color: #495057;
+            background-color: #0b1739;
         }
-        /* Main content area */
         .main-content {
             margin-left: 250px;
             padding: 20px;
             width: calc(100% - 250px);
-            background-color: #25476a;
-            color: #03a9f4;
+            background-color: #081028;
+            color:#ffff;
+        }
+        .main-content h2 {
+            color: #ff5a6533
         }
         .main-content h1 {
-            color: white;
+            color:#ffff;
         }
         .section {
             margin-bottom: 30px;
@@ -82,16 +74,16 @@ $messages_result = $conn->query("SELECT * FROM messages");
             margin-bottom: 20px;
         }
         table, th, td {
-            border: 1px solid #dee2e6;
+            border: 1px solid #0b1739;
         }
         th, td {
             padding: 10px;
             text-align: left;
         }
         th {
-            background-color: #e9ecef;
+            background-color: #0b1739f4;
+            color: #ff5a65;
         }
-        /* Button and hover effects */
         .btn {
             padding: 10px 20px;
             background-color: #007bff;
@@ -106,9 +98,8 @@ $messages_result = $conn->query("SELECT * FROM messages");
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
-            <h2>Admin Panel</h2>
+            <h2>Welcome Admin!</h2>
             <ul>
                 <li><a href="admin.php?page=dashboard">Dashboard</a></li>
                 <li><a href="admin.php?page=manage_donors">Manage Donors</a></li>
@@ -119,11 +110,9 @@ $messages_result = $conn->query("SELECT * FROM messages");
             </ul>
         </div>
 
-        <!-- Main Content Area -->
         <div class="main-content">
             <h1>Admin Dashboard</h1>
             <?php
-                // Load content based on the menu option clicked
                 if (isset($_GET['page'])) {
                     $page = $_GET['page'];
 

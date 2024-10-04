@@ -1,11 +1,9 @@
-/* General Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #fff5f5;
@@ -13,7 +11,6 @@ body {
     scroll-behavior: smooth;
 }
 
-/* Header */
 header {
     background-color: #ff4c4c;
     padding: 20px;
@@ -61,7 +58,6 @@ nav ul li a:hover {
     transition: 3ms ease-in;
 }
 
-/* Hero Section */
 .hero {
     background: url('../images/bg.jpg') no-repeat center center/cover;
     color: #fff;
@@ -116,7 +112,6 @@ nav ul li a:hover {
     border-bottom: red 1px solid;
 }
 
-/* Why Donate Blood Section */
 .why {
     background-color: #f4f4f4;
     padding: 50px 20px;
@@ -173,7 +168,6 @@ nav ul li a:hover {
     }
 }
 
-/* Events Section */
 .events {
     
     background: url('../images/img3.jpg') no-repeat center center/cover;
@@ -327,7 +321,6 @@ nav ul li a:hover {
     }
 }
 
-/* Footer Styling */
 .footer {
     background-color: #2c3e50;
     color: #ecf0f1;

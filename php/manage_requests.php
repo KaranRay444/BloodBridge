@@ -1,7 +1,6 @@
 <?php
-include 'connect.php'; // Database connection
+include 'connect.php'; 
 
-// Fetch blood requests from the database
 $requests_result = $conn->query("SELECT * FROM need_blood");
 
 ?>

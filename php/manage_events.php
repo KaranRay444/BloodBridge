@@ -1,17 +1,14 @@
 <?php
-include 'connect.php'; // Database connection
+include 'connect.php'; 
 
-// Fetch events from the database
 $events_result = $conn->query("SELECT * FROM events");
 
-// Delete logic
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $conn->query("DELETE FROM events WHERE id=$id");
     header('Location: manage_events.php');
 }
 
-// Update logic
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $event_name = $_POST['event_name'];
@@ -23,7 +20,6 @@ if (isset($_POST['update'])) {
     header('Location: manage_events.php');
 }
 
-// Insert logic
 if (isset($_POST['add'])) {
     $event_name = $_POST['event_name'];
     $event_date = $_POST['event_date'];
@@ -73,7 +69,6 @@ if (isset($_POST['add'])) {
 <body>
     <h2>Events List</h2>
 
-    <!-- Add New Event Form -->
     <form method="POST" action="">
         <input type="text" name="event_name" placeholder="Event Name" required>
         <input type="date" name="event_date" required>
@@ -82,7 +77,6 @@ if (isset($_POST['add'])) {
         <button type="submit" name="add">Add Event</button>
     </form>
 
-    <!-- Display Existing Events -->
     <table>
         <thead>
             <tr>
@@ -103,7 +97,6 @@ if (isset($_POST['add'])) {
                     <td><?php echo $event['event_location']; ?></td>
                     <td><?php echo $event['description']; ?></td>
                     <td>
-                        <!-- Update Form -->
                         <form method="POST" action="">
                             <input type="hidden" name="id" value="<?php echo $event['id']; ?>">
                             <input type="text" name="event_name" value="<?php echo $event['event_name']; ?>" required>
@@ -113,7 +106,6 @@ if (isset($_POST['add'])) {
                             <button type="submit" name="update">Update</button>
                         </form>
 
-                        <!-- Delete Button -->
                         <a href="manage_events.php?delete=<?php echo $event['id']; ?>" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
                     </td>
                 </tr>

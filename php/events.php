@@ -1,8 +1,6 @@
 <?php
-// Include the database connection
 include 'connect.php';
 
-// Fetch events from the database
 $sql = "SELECT * FROM events";
 $result = $conn->query($sql);
 
@@ -19,6 +17,5 @@ if ($result->num_rows > 0) {
     echo "<p>No upcoming events</p>";
 }
 
-// Close the connection
 $conn->close();
 ?>
