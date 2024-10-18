@@ -32,7 +32,7 @@
         }
 
         .need-blood-header {
-            background-color:  #ff4c4c;
+            background-color: #ff4c4c;
             color: #fff;
             padding: 20px;
             text-align: center;
@@ -95,23 +95,50 @@ include('connect.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize input data
-    $patientName = $conn->real_escape_string($_POST['patient-name']);
-    $bloodType = $conn->real_escape_string($_POST['blood-type']);
-    $hospitalName = $conn->real_escape_string($_POST['hospital-name']);
-    $doctorName = $conn->real_escape_string($_POST['doctor-name']);
-    $contact = $conn->real_escape_string($_POST['contact']);
-    $requiredDate = $conn->real_escape_string($_POST['required-date']);
-    $message = $conn->real_escape_string($_POST['message']);
+    $patientName = $conn->real_escape_string(trim($_POST['patient-name']));
+    $bloodType = $conn->real_escape_string(trim($_POST['blood-type']));
+    $hospitalName = $conn->real_escape_string(trim($_POST['hospital-name']));
+    $doctorName = $conn->real_escape_string(trim($_POST['doctor-name']));
+    $contact = $conn->real_escape_string(trim($_POST['contact']));
+    $message = $conn->real_escape_string(trim($_POST['message']));
+    $username = $conn->real_escape_string(trim($_POST['username']));
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password
 
-    // Prepare SQL query
-    $sql = "INSERT INTO need_blood (patient_name, blood_type, hospital_name, doctor_name, contact, required_date, message)
-            VALUES ('$patientName', '$bloodType', '$hospitalName', '$doctorName', '$contact', '$requiredDate', '$message')";
+    // Set user role
+    $userRole = 'patient'; // Change this as needed
 
-    // Execute the query and handle errors
-    if ($conn->query($sql) === TRUE) {
-        echo "Blood request submitted successfully.";
+    // Validate input
+    if (empty($patientName) || empty($bloodType) || empty($hospitalName) || empty($doctorName) || empty($contact) || empty($username) || empty($password)) {
+        echo "Please fill in all required fields.";
+    } elseif (!preg_match("/^[0-9]{10}$/", $contact)) { // Validate contact number
+        echo "Please enter a valid 10-digit contact number.";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Check if username already exists
+        $sqlCheckUsername = "SELECT * FROM users WHERE username = '$username'";
+        $resultCheck = $conn->query($sqlCheckUsername);
+        
+        if ($resultCheck->num_rows > 0) {
+            echo "Username already exists. Please choose another one.";
+        } else {
+            // Prepare SQL query to insert into the users table
+            $sqlUser = "INSERT INTO users (username, password, role) VALUES ('$username', '$password', '$userRole')";
+
+            // Execute the query for users
+            if ($conn->query($sqlUser) === TRUE) {
+                // Prepare SQL query to insert into the patients table
+                $sqlPatient = "INSERT INTO patients (patient_name, blood_type, hospital_name, doctor_name, contact, message)
+                               VALUES ('$patientName', '$bloodType', '$hospitalName', '$doctorName', '$contact', '$message')";
+
+                // Execute the patient query
+                if ($conn->query($sqlPatient) === TRUE) {
+                    echo "Registration successful.";
+                } else {
+                    echo "Error: " . $sqlPatient . "<br>" . $conn->error;
+                }
+            } else {
+                echo "Error: " . $sqlUser . "<br>" . $conn->error;
+            }
+        }
     }
 
     // Close the connection
@@ -119,70 +146,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
-
 <?php include('../header.php'); ?>
 <div class="need-blood-container">
     <div class="need-blood-form">
         <div class="need-blood-header">
-            <h1>Need Blood Form</h1>
-            <p>Please fill out the details correctly to request blood. Your request will be handled confidentially.</p>
+            <h1>Patient Registration Form</h1>
+            <p>Please fill out the details correctly to register as a blood requestor. Your information will be handled confidentially.</p>
         </div>
 
         <div class="form-content">
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="patient-name">Patient's Name</label>
-                    <input type="text" id="patient-name" name="patient-name" placeholder="Enter patient's full name" required>
-                </div>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="patient-name">Patient's Name <span class="required">*</span></label>
+                <input type="text" id="patient-name" name="patient-name" placeholder="Enter patient's full name" required pattern="[A-Za-z\s]+" title="Please enter only letters and spaces.">
+            </div>
 
-                <div class="form-group">
-                    <label for="blood-type">Required Blood Type</label>
-                    <select id="blood-type" name="blood-type" required>
-                        <option value="" disabled selected>Select the required blood type</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="blood-type">Blood Type <span class="required">*</span></label>
+                <select id="blood-type" name="blood-type" required>
+                    <option value="" disabled selected>Select blood type</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="hospital-name">Hospital Name</label>
-                    <input type="text" id="hospital-name" name="hospital-name" placeholder="Enter the hospital name" required>
-                </div>
+            <div class="form-group">
+                <label for="hospital-name">Hospital Name <span class="required">*</span></label>
+                <input type="text" id="hospital-name" name="hospital-name" placeholder="Enter the hospital name" required pattern="[A-Za-z\s]+" title="Please enter only letters and spaces.">
+            </div>
 
-                <div class="form-group">
-                    <label for="doctor-name">Doctor's Name</label>
-                    <input type="text" id="doctor-name" name="doctor-name" placeholder="Enter the doctor's name" required>
-                </div>
+            <div class="form-group">
+                <label for="doctor-name">Doctor's Name <span class="required">*</span></label>
+                <input type="text" id="doctor-name" name="doctor-name" placeholder="Enter the doctor's name" required pattern="[A-Za-z\s]+" title="Please enter only letters and spaces.">
+            </div>
 
-                <div class="form-group">
-                    <label for="contact">Contact Number</label>
-                    <input type="tel" id="contact" name="contact" placeholder="Enter your contact number" required>
-                </div>
+            <div class="form-group">
+                <label for="contact">Contact Number <span class="required">*</span></label>
+                <input type="tel" id="contact" name="contact" placeholder="Enter your 10-digit contact number" pattern="[0-9]{10}" required title="Please enter a valid 10-digit contact number.">
+            </div>
 
-                <div class="form-group">
-                    <label for="required-date">Required Date</label>
-                    <input type="date" id="required-date" name="required-date" required>
-                </div>
+            <div class="form-group">
+                <label for="message">Additional Message (Optional)</label>
+                <textarea id="message" name="message" placeholder="Enter any additional information"></textarea>
+            </div>
 
-                <div class="form-group">
-                    <label for="message">Additional Message (Optional)</label>
-                    <textarea id="message" name="message" placeholder="Enter any additional information"></textarea>
-                </div>
+            <div class="form-group">
+                <label for="username">Create Username <span class="required">*</span></label>
+                <input type="text" id="username" name="username" required>
+            </div>
 
-                <button type="submit" class="submit-btn">Submit Request</button>
-            </form>
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" name="password" placeholder="Create a password (minimum 8 characters)" minlength="8" required```html
+                minlength="8" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
         </div>
     </div>
 </div>
-
-<?php include('../footer.php'); ?>
-
+            
 </body>
 </html>

@@ -2,6 +2,7 @@
 include 'connect.php';
 
 $donors_result = $conn->query("SELECT * FROM donors");
+$patients_result = $conn->query("SELECT * FROM patients"); // Assuming you have a patients table
 $requests_result = $conn->query("SELECT * FROM need_blood");
 $events_result = $conn->query("SELECT * FROM events");
 $messages_result = $conn->query("SELECT * FROM messages");
@@ -103,7 +104,8 @@ $messages_result = $conn->query("SELECT * FROM messages");
             <ul>
                 <li><a href="admin.php?page=dashboard">Dashboard</a></li>
                 <li><a href="admin.php?page=manage_donors">Manage Donors</a></li>
-                <li><a href="admin.php?page=manage_requests">Manage Blood Requests</a></li>
+                <li><a href="admin.php?page=manage_patients">Manage Patients</a></li> <!-- New link for patients -->
+                <li><a href="admin.php?page=donor_requests">Donor Requests</a></li> <!-- New link for donor requests -->
                 <li><a href="admin.php?page=manage_events">Manage Events</a></li>
                 <li><a href="admin.php?page=manage_messages">Manage Messages</a></li>
                 <li><a href="logout.php">Logout</a></li>
@@ -118,10 +120,13 @@ $messages_result = $conn->query("SELECT * FROM messages");
 
                     switch ($page) {
                         case 'manage_donors':
-                            include 'manage_donors.php';
+                            include 'manage_donors.php'; // This page should handle adding/deleting donors
                             break;
-                        case 'manage_requests':
-                            include 'manage_requests.php';
+                        case 'manage_patients':
+                            include 'manage_patients.php'; // This page should handle adding/deleting patients
+                            break;
+                        case 'donor_requests':
+                            include 'donor_requests.php'; // This page should handle donor requests with approve/reject
                             break;
                         case 'manage_events':
                             include 'manage_events.php';

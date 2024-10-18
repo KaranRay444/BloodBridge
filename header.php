@@ -9,8 +9,8 @@
         <li><a href="/BBMS/BloodBridge/index.php#why_donate">Why Donate Blood</a></li>
         <li><a href="/BBMS/BloodBridge/php/donor.php">Become A Donor</a></li>
         <li><a href="/BBMS/BloodBridge/index.php#events">Events</a></li>
-        <li><a href="/BBMS/BloodBridge/php/need.php">Need Blood</a></li>
         <li><a href="/BBMS/BloodBridge/index.php#get-in-touch" >Contact Us</a></li>
+        <li><a href="/BBMS/BloodBridge/php/login.php">Login/Signup</a></li>
     </ul>
 </nav>
 </header>
