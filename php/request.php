@@ -1,9 +1,27 @@
 <?php
+session_start();
 include 'connect.php';
+
+// Check if user is logged in and is a patient
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'patient') {
+    header("Location: login.php"); // Redirect to login if not logged in
+    exit();
+}
+
+$patient_id = $_SESSION['user_id']; // Get patient ID from session
+
+// Fetch patient details using the patient ID
+$patient_result = $conn->query("SELECT * FROM patients WHERE user_id = '$patient_id'");
+
+if ($patient_result && $patient_result->num_rows > 0) {
+    $patient = $patient_result->fetch_assoc();
+} else {
+    $error = "No patient data found for this user.";
+    $patient = null; // Ensure $patient is null if not found
+}
 
 // Handle the form submission for blood request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $patient_id = 1; // Replace with session value
     $blood_group = $_POST['blood_group'];
     $quantity = $_POST['quantity'];
     $disease = $_POST['disease'];
@@ -21,12 +39,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Disease information is required.';
     }
 
+    // Check if there are no validation errors
     if (empty($errors)) {
+        $actual_patient_id = $patient['id']; // Fetching patient ID from session
+
         $sql = "INSERT INTO need_blood (patient_id, blood_group, no_of_units, disease, created_at, status) VALUES (?, ?, ?, ?, NOW(), ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("issss", $patient_id, $blood_group, $quantity, $disease, $status);
-        $stmt->execute();
-        echo "Blood request submitted successfully!";
+        $stmt->bind_param("issss", $actual_patient_id, $blood_group, $quantity, $disease, $status);
+
+        if ($stmt->execute()) {
+            echo "<p style='color:green;'>Blood request submitted successfully!</p>";
+        } else {
+            echo "<p style='color:red;'>Error submitting request: " . $stmt->error . "</p>";
+        }
     } else {
         foreach ($errors as $error) {
             echo "<p style='color:red;'>$error</p>";
@@ -34,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Blood groups for selection
 $blood_groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 ?>
 
@@ -45,83 +69,21 @@ $blood_groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Blood</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #0a1330;
-            color: #ffffff;
-            position: fixed;
-            padding-top: 20px;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #cf1b2b;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            padding: 15px;
-            text-align: center;
-        }
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            font-size: 16px;
-        }
-        .sidebar ul li a:hover {
-            background-color: #0b1739;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            width: calc(100% - 250px);
-            background-color: #ffffff;
-            color: #333;
-        }
-        .main-content h1 {
-            color: #ff5a65;
-        }
-        form {
-            background-color: #0b1739;
-            padding: 20px;
-            border-radius: 8px;
-            color: #ffffff;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { display: flex; }
+        .sidebar { width: 250px; height: 100vh; background-color: #0a1330; color: #ffffff; position: fixed; padding-top: 20px; }
+        .sidebar h2 { text-align: center; margin-bottom: 20px; color: #cf1b2b; }
+        .sidebar ul { list-style-type: none; padding: 0; }
+        .sidebar ul li { padding: 15px; text-align: center; }
+        .sidebar ul li a { color: white; text-decoration: none; display: block; font-size: 16px; }
+        .sidebar ul li a:hover { background-color: #0b1739; }
+        .main-content { margin-left: 250px; padding: 20px; width: calc(100% - 250px); background-color: #ffffff; color: #333; }
+        .main-content h1 { color: #ff5a65; }
+        form { background-color: #0b1739; padding: 20px; border-radius: 8px; color: #ffffff; }
+        label { display: block; margin: 10px 0 5px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
@@ -159,7 +121,3 @@ $blood_groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
     </div>
 </body>
 </html>
-
-
-
-   

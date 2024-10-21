@@ -1,52 +1,68 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 session_start();
 include 'connect.php'; // Include your database connection
 
-// Check if form data is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capture form data and sanitize inputs
     $username = $conn->real_escape_string(trim($_POST['username']));
     $password = $_POST['password'];
     $role = $conn->real_escape_string(trim($_POST['role']));
 
-    // Query to check the user
+    // Query to check the user based on role from users table
     $sql = "SELECT * FROM users WHERE username='$username' AND role='$role'";
     $result = $conn->query($sql);
 
-    if ($result) {
-        if ($result->num_rows == 1) {
-            $user = $result->fetch_assoc();
-            // Verify the password
-            if (password_verify($password, $user['password'])) {
-                // Set session variables
-                $_SESSION['user_id'] = $user['id']; // Store user ID for donations
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
-                
-                // Redirect to dashboard based on role
-                switch ($user['role']) {
-                    case 'patient':
-                        header("Location: p_dash.php");
-                        break;
-                    case 'admin':
-                        header("Location: admin.php");
-                        break;
-                    case 'donor':
-                        header("Location: donor_dashboard.php");
-                        break;
+    if ($result && $result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+
+        // Verify the password
+        if (password_verify($password, $user['password'])) {
+            // Set session variables
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+
+            // If the user is a donor, fetch donor data
+            if ($user['role'] === 'donor') {
+                // Fetch donor data based on user ID
+                $userId = $user['id']; 
+                $donorSql = "SELECT * FROM donors WHERE user_id = ?";
+                $stmt = $conn->prepare($donorSql);
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                $donorResult = $stmt->get_result();
+
+                if ($donorResult->num_rows > 0) {
+                    $donorData = $donorResult->fetch_assoc();
+                    // Store donor data in session if needed
+                    $_SESSION['donor_data'] = $donorData;
+                } else {
+                    echo "No donor data found for this user.";
                 }
-                exit(); // Stop further script execution
-            } else {
-                echo "Invalid password.";
             }
+
+            // Redirect based on the role
+            switch ($user['role']) {
+                case 'patient':
+                    header("Location: p_dash.php");
+                    break;
+                case 'donor':
+                    header("Location: donor_dashboard.php");
+                    break;
+                case 'admin':
+                    header("Location: admin.php");
+                    break;
+                default:
+                    echo "Role not recognized.";
+                    exit();
+            }
+            exit();
         } else {
-            echo "Invalid username or role.";
+            echo "Invalid password.";
         }
     } else {
-        echo "Error: " . htmlspecialchars($conn->error); // Print query error if exists
+        echo "Invalid username or role.";
     }
+} else {
+    echo "Invalid request method.";
 }
 ?>

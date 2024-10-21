@@ -1,22 +1,33 @@
 <?php
 include 'connect.php';
+session_start();
 
-// Handle the form submission
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo "You need to log in first.";
+    exit;
+}
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $donor_id = 1; // Replace with session value for logged-in donor
-    $blood_group = $_POST['blood_group'];
+    $user_id = $_SESSION['user_id'];
+    $blood_group = $_POST['blood_type'];
     $no_of_units = $_POST['no_of_units'];
-    $disease = $_POST['disease'];
+    $disease = $_POST['disease'] ?? null; // Optional disease field
 
-    // Insert donation data into the donations table
-    $sql = "INSERT INTO donations (donor_id, blood_group, no_of_units, disease, donation_date) 
-            VALUES ('$donor_id', '$blood_group', '$no_of_units', '$disease', NOW())";
-    
-    if ($conn->query($sql) === TRUE) {
-        echo "Donation successfully recorded!";
+    // Insert the donation request into the database
+    $sql = "INSERT INTO donations (donor_id, blood_type, no_of_units, disease, status, donation_date) 
+            VALUES (?, ?, ?, ?, 'Pending', NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("isis", $user_id, $blood_group, $no_of_units, $disease);
+
+    if ($stmt->execute()) {
+        echo "Your donation request has been submitted!";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $stmt->error;
     }
+
+    $stmt->close();
 }
 ?>
 
@@ -25,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donate Now</title>
+    <title>Donate Blood</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,53 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 0;
         }
         .container {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background-color: #0a1330;
-            color: #ffffff;
-            position: fixed;
-            padding-top: 20px;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #cf1b2b;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            padding: 15px;
-            text-align: center;
-        }
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            font-size: 16px;
-        }
-        .sidebar ul li a:hover {
-            background-color: #0b1739;
-        }
-        .main-content {
-            margin-left: 250px;
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
-            width: calc(100% - 250px);
-            background-color: #ffffff;
-            color: #333;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        .main-content h1 {
+        h1 {
             color: #ff5a65;
+            text-align: center;
         }
         form {
-            background-color: #ffffff;
-            padding: 20px;
             margin-top: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         label {
             display: block;
@@ -100,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: white;
             border: none;
             cursor: pointer;
+            width: 100%;
             border-radius: 5px;
         }
         input[type="submit"]:hover {
@@ -109,42 +86,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
-            <h2>Donor Panel</h2>
-            <ul>
-                <li><a href="donor_dashboard.php">Dashboard</a></li>
-                <li><a href="donate_now.php">Donate Now</a></li>
-                <li><a href="my_donations.php">My Donations</a></li>
-                <li><a href="donation_certificate.php">Donation Certificate</a></li>
-                <li><a href="update_profile.php">Update Profile</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            </ul>
-        </div>
+        <h1>Donate Blood</h1>
+        <form action="" method="POST">
+            <label for="blood_type">Blood Type:</label>
+            <select name="blood_type" id="blood_type" required>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
 
-        <div class="main-content">
-            <h1>Donate Blood</h1>
-            <form action="" method="POST">
-                <label for="blood_group">Blood Group:</label>
-                <select name="blood_group" id="blood_group" required>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                </select>
+            <label for="no_of_units">Number of Units:</label>
+            <input type="number" name="no_of_units" id="no_of_units" required>
 
-                <label for="no_of_units">Number of Units:</label>
-                <input type="number" name="no_of_units" id="no_of_units" required>
+            <label for="disease">Any Disease (if applicable):</label>
+            <input type="text" name="disease" id="disease">
 
-                <label for="disease">Any Disease (if applicable):</label>
-                <input type="text" name="disease" id="disease">
-
-                <input type="submit" value="Donate Now">
-            </form>
-        </div>
+            <input type="submit" value="Request Donation">
+        </form>
     </div>
 </body>
 </html>

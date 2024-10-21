@@ -1,9 +1,26 @@
 <?php
-include 'connect.php';
+session_start();
+include 'connect.php'; // Include your database connection
 
-// Retrieve requests for the logged-in patient
-$patient_id = 1; // Replace with session value
-$requests_result = $conn->query("SELECT * FROM need_blood WHERE patient_id = '$patient_id'");
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo "You must be logged in to view your requests.";
+    exit();
+}
+
+// Get the user ID from the session
+$user_id = $_SESSION['user_id'];
+
+// Fetch requests from the need_blood table for the logged-in user
+$sql = "SELECT nb.*, p.patient_name 
+        FROM need_blood nb 
+        JOIN patients p ON nb.patient_id = p.id 
+        WHERE p.user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
 ?>
 
 <!DOCTYPE html>
@@ -65,19 +82,15 @@ $requests_result = $conn->query("SELECT * FROM need_blood WHERE patient_id = '$p
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
         th, td {
+            border: 1px solid #ccc;
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #0b1739;
-            color: #ffffff;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
+            color: white;
         }
     </style>
 </head>
@@ -94,25 +107,37 @@ $requests_result = $conn->query("SELECT * FROM need_blood WHERE patient_id = '$p
         </div>
 
         <div class="main-content">
-            <h1>My Requests</h1>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Blood Group</th>
-                    <th>Quantity</th>
-                    <th>Disease</th>
-                    <th>Status</th>
-                </tr>
-                <?php while ($row = $requests_result->fetch_assoc()) { ?>
-                    <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['blood_group']; ?></td>
-                        <td><?php echo $row['no_of_units']; ?></td>
-                        <td><?php echo $row['disease']; ?></td>
-                        <td><?php echo $row['status']; ?></td>
-                    </tr>
-                <?php } ?>
-            </table>
+            <h1>My Blood Requests</h1>
+            <?php if ($result->num_rows > 0): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Patient Name</th>
+                            <th>Blood Group</th>
+                            <th>Quantity (mL)</th>
+                            <th>Disease</th>
+                            <th>Status</th>
+                            <th>Requested On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['patient_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['blood_group']); ?></td>
+                                <td><?php echo htmlspecialchars($row['no_of_units']); ?></td>
+                                <td><?php echo htmlspecialchars($row['disease']); ?></td>
+                                <td><?php echo htmlspecialchars($row['status']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No requests found.</p>
+            <?php endif; ?>
         </div>
     </div>
 </body>

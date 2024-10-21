@@ -105,7 +105,6 @@ $messages_result = $conn->query("SELECT * FROM messages");
                 <li><a href="admin.php?page=dashboard">Dashboard</a></li>
                 <li><a href="admin.php?page=manage_donors">Manage Donors</a></li>
                 <li><a href="admin.php?page=manage_patients">Manage Patients</a></li> <!-- New link for patients -->
-                <li><a href="admin.php?page=donor_requests">Donor Requests</a></li> <!-- New link for donor requests -->
                 <li><a href="admin.php?page=manage_events">Manage Events</a></li>
                 <li><a href="admin.php?page=manage_messages">Manage Messages</a></li>
                 <li><a href="logout.php">Logout</a></li>

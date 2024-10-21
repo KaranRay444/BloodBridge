@@ -25,6 +25,7 @@ if ($donations_result === false) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

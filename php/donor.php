@@ -74,13 +74,14 @@ include('connect.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect and sanitize input data
+    $username = $conn->real_escape_string(trim($_POST['username']));
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password
+    $role = 'donor'; // Since it's a donor registration form
+
     $donorName = $conn->real_escape_string(trim($_POST['donor-name']));
     $bloodType = $conn->real_escape_string(trim($_POST['blood-type']));
     $contact = $conn->real_escape_string(trim($_POST['contact']));
-    $city = $conn->real_escape_string(trim($_POST['city'])); // Added city field
-    $username = $conn->real_escape_string(trim($_POST['username']));
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password
-    $userRole = 'donor'; // Setting the role as donor
+    $city = $conn->real_escape_string(trim($_POST['city']));
 
     // Validate input
     if (empty($donorName) || empty($bloodType) || empty($contact) || empty($city) || empty($username) || empty($password)) {
@@ -88,24 +89,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!preg_match("/^[0-9]{10}$/", $contact)) { // Validate contact number
         echo "Please enter a valid 10-digit contact number.";
     } else {
-        // Prepare SQL query to insert into the donors table
-        $donorSql = "INSERT INTO donors (donor_name, blood_type, contact, city, username, password)
-                     VALUES ('$donorName', '$bloodType', '$contact', '$city', '$username', '$password')";
+        // Insert into users table
+        $userSql = "INSERT INTO users (username, password, role) VALUES ('$username', '$password', '$role')";
 
-        // Prepare SQL query to insert into the users table
-        $userSql = "INSERT INTO users (username, password, role) 
-                    VALUES ('$username', '$password', '$userRole')";
+        if ($conn->query($userSql) === TRUE) {
+            // Get the last inserted user ID
+            $user_id = $conn->insert_id;
 
-        // Execute the donor query and handle errors
-        if ($conn->query($donorSql) === TRUE) {
-            // If donor inserted successfully, now insert into users table
-            if ($conn->query($userSql) === TRUE) {
-                echo "Registration successful.";
+            // Insert into donors table
+            $donorSql = "INSERT INTO donors (user_id, donor_name, blood_type, contact, city) VALUES ('$user_id', '$donorName', '$bloodType', '$contact', '$city')";
+
+            if ($conn->query($donorSql) === TRUE) {
+                // Insert an initial record into the donations table
+                $donor_id = $conn->insert_id; // Last inserted donor ID
+                $donationSql = "INSERT INTO donations (donor_id, blood_type, donation_date, status) VALUES ('$donor_id', '$bloodType', NOW(), 'Pending')";
+
+                if ($conn->query($donationSql) === TRUE) {
+                    header("Location:login.php");
+                    echo "Registration successful. Login Now!";
+                  
+                } else {
+                    echo "Error inserting into donations table: " . $conn->error;
+                }
             } else {
-                echo "Error inserting into users table: " . $conn->error;
+                echo "Error inserting into donors table: " . $conn->error;
             }
         } else {
-            echo "Error inserting into donors table: " . $conn->error;
+            echo "Error inserting into users table: " . $conn->error;
         }
     }
 
@@ -113,7 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 
 <?php include('../header.php'); ?>
 <div class="donor-registration-container">
@@ -147,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="form-group">
-                    <label for="city">City <span class="required">*</span></label> <!-- New city field -->
+                    <label for="city">City <span class="required">*</span></label>
                     <input type="text" id="city" name="city" placeholder="Enter your city" required>
                 </div>
 

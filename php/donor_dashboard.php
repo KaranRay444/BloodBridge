@@ -1,3 +1,51 @@
+<?php
+session_start();
+include 'connect.php';
+
+// Check if user is logged in and is a donor
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'donor') {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch donor details using the user ID from the session
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM donors WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$donor_result = $stmt->get_result();
+
+if ($donor_result && $donor_result->num_rows > 0) {
+    $donor = $donor_result->fetch_assoc();
+} else {
+    echo "No donor data found for this user.";
+    exit();
+}
+// Fetch donation statistics for the logged-in donor
+$donation_stats_sql = "SELECT 
+                       COUNT(*) AS total_donations, 
+                       SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) AS approved_donations, 
+                       SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending_donations 
+                       FROM donations 
+                       WHERE donor_id = ?";
+$stats_stmt = $conn->prepare($donation_stats_sql);
+$stats_stmt->bind_param("i", $donor_id);
+$stats_stmt->execute();
+$stats_result = $stats_stmt->get_result();
+
+$stats = $stats_result->fetch_assoc();
+$total_donations = $stats['total_donations'] ?? 0;
+$approved_donations = $stats['approved_donations'] ?? 0;
+$pending_donations = $stats['pending_donations'] ?? 0;
+
+// Display zeros if no donations
+if ($total_donations == 0) {
+    $approved_donations = 0;
+    $pending_donations = 0;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +109,13 @@
             margin-bottom: 20px;
             text-align: center;
         }
+        .donor-info {
+            background-color: #e2e2e2;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -72,18 +127,31 @@
                 <li><a href="donation_form.php">Donate Now</a></li>
                 <li><a href="my_donations.php">My Donations</a></li>
                 <li><a href="donation_certificate.php">Donation Certificate</a></li>
-                <li><a href="profile_update.php">Update Profile</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
 
         <div class="main-content">
             <h1>Welcome to Donor Dashboard</h1>
-            <div class="stats-box">
-                <h2>Total Donations: 5</h2>
-                <h2>Approved Donations: 3</h2>
-                <h2>Pending Donations: 2</h2>
-            </div>
+
+            <?php if (isset($donor)): ?>
+                <div class="donor-info">
+                    <h2>Your Information</h2>
+                    <p><strong>Donor ID:</strong> <?php echo htmlspecialchars($donor['id']); ?></p>
+                    <p><strong>Name:</strong> <?php echo htmlspecialchars($donor['donor_name']); ?></p>
+                    <p><strong>Contact:</strong> <?php echo htmlspecialchars($donor['contact']); ?></p>
+                    <p><strong>Blood Type:</strong> <?php echo htmlspecialchars($donor['blood_type']); ?></p>
+                </div>
+
+                <div class="stats-box">
+    <h2>Total Donations: <?php echo $total_donations; ?></h2>
+    <h2>Approved Donations: <?php echo $approved_donations; ?></h2>
+    <h2>Pending Donations: <?php echo $pending_donations; ?></h2>
+</div>
+            <?php else: ?>
+                <p>No donor data found for this user.</p>
+            <?php endif; ?>
+
             <a href="donation_form.php">Submit a Donation</a>
         </div>
     </div>
