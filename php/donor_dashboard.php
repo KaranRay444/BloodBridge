@@ -22,7 +22,9 @@ if ($donor_result && $donor_result->num_rows > 0) {
     echo "No donor data found for this user.";
     exit();
 }
+
 // Fetch donation statistics for the logged-in donor
+$donor_id = $donor['id']; // Use donor's ID for fetching stats
 $donation_stats_sql = "SELECT 
                        COUNT(*) AS total_donations, 
                        SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) AS approved_donations, 
@@ -39,11 +41,6 @@ $total_donations = $stats['total_donations'] ?? 0;
 $approved_donations = $stats['approved_donations'] ?? 0;
 $pending_donations = $stats['pending_donations'] ?? 0;
 
-// Display zeros if no donations
-if ($total_donations == 0) {
-    $approved_donations = 0;
-    $pending_donations = 0;
-}
 ?>
 
 <!DOCTYPE html>
@@ -108,6 +105,7 @@ if ($total_donations == 0) {
             padding: 20px;
             margin-bottom: 20px;
             text-align: center;
+            border-radius: 5px; /* Add border radius for better aesthetics */
         }
         .donor-info {
             background-color: #e2e2e2;
@@ -126,7 +124,6 @@ if ($total_donations == 0) {
                 <li><a href="donor_dashboard.php">Dashboard</a></li>
                 <li><a href="donation_form.php">Donate Now</a></li>
                 <li><a href="my_donations.php">My Donations</a></li>
-                <li><a href="donation_certificate.php">Donation Certificate</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
@@ -144,10 +141,10 @@ if ($total_donations == 0) {
                 </div>
 
                 <div class="stats-box">
-    <h2>Total Donations: <?php echo $total_donations; ?></h2>
-    <h2>Approved Donations: <?php echo $approved_donations; ?></h2>
-    <h2>Pending Donations: <?php echo $pending_donations; ?></h2>
-</div>
+                    <h2>Total Donations: <?php echo $total_donations; ?></h2>
+                    <h2>Approved Donations: <?php echo $approved_donations; ?></h2>
+                    <h2>Pending Donations: <?php echo $pending_donations; ?></h2>
+                </div>
             <?php else: ?>
                 <p>No donor data found for this user.</p>
             <?php endif; ?>

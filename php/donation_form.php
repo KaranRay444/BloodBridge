@@ -40,20 +40,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
         }
-        h1 {
-            color: #ff5a65;
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #0a1330;
+            color: #ffffff;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .sidebar h2 {
             text-align: center;
+            margin-bottom: 20px;
+            color: #cf1b2b;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            text-align: center;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #0b1739;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            background-color: #ffffff;
+            color: #333;
+        }
+        .main-content h1 {
+            color: #ff5a65;
         }
         form {
             margin-top: 20px;
@@ -85,7 +117,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-    <div class="container">
+
+<div class="container">
+    <div class="sidebar">
+        <h2>Donor Panel</h2>
+        <ul>
+            <li><a href="donor_dashboard.php">Dashboard</a></li>
+            <li><a href="donation_form.php">Donate Now</a></li>
+            <li><a href="my_donations.php">My Donations</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
         <h1>Donate Blood</h1>
         <form action="" method="POST">
             <label for="blood_type">Blood Type:</label>
@@ -109,5 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="submit" value="Request Donation">
         </form>
     </div>
+</div>
+
 </body>
 </html>

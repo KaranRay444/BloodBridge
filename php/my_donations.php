@@ -16,15 +16,17 @@ include 'connect.php';
 // Fetch donor ID from session
 $donor_id = $_SESSION['user_id'];
 
-// Query donations based on donor ID
-$donations_result = $conn->query("SELECT * FROM donations WHERE donor_id = '$donor_id'");
+// Prepare and execute the query to fetch donations based on donor ID
+$stmt = $conn->prepare("SELECT * FROM donations WHERE donor_id = ?");
+$stmt->bind_param("i", $donor_id);
+$stmt->execute();
+$donations_result = $stmt->get_result();
 
 if ($donations_result === false) {
     echo "Database query failed: " . $conn->error; // Check for SQL errors
     exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +35,16 @@ if ($donations_result === false) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Donations</title>
     <style>
-            .sidebar {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
             width: 250px;
             height: 100vh;
             background-color: #0a1330;
@@ -62,23 +73,6 @@ if ($donations_result === false) {
         }
         .sidebar ul li a:hover {
             background-color: #0b1739;
-        }
-           .sidebar {
-        width: 250px;
-        height: 100vh;
-        background-color: #0a1330;
-        color: #ffffff;
-        position: fixed;
-        padding-top: 20px;
-    }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            display: flex;
         }
         .main-content {
             margin-left: 250px;
@@ -119,8 +113,6 @@ if ($donations_result === false) {
                 <li><a href="donor_dashboard.php">Dashboard</a></li>
                 <li><a href="donation_form.php">Donate Now</a></li>
                 <li><a href="my_donations.php">My Donations</a></li>
-                <li><a href="donation_certificate.php">Donation Certificate</a></li>
-                <li><a href="profile_update.php">Update Profile</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
@@ -128,28 +120,32 @@ if ($donations_result === false) {
         <div class="main-content">
             <h1>My Donations</h1>
             <table class="donations-table">
-                <tr>
-                    <th>ID</th>
-                    <th>Blood Type</th>
-                    <th>Quantity</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                </tr>
-                <?php if ($donations_result->num_rows > 0) { 
-                    while ($row = $donations_result->fetch_assoc()) { ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['blood_type']); ?></td>
-                            <td><?php echo htmlspecialchars($row['quantity']); ?></td>
-                            <td><?php echo htmlspecialchars($row['donation_date']); ?></td>
-                            <td><?php echo htmlspecialchars($row['status']); ?></td>
-                        </tr>
-                    <?php } 
-                } else { ?>
+                <thead>
                     <tr>
-                        <td colspan="5">No donations found.</td>
+                        <th>ID</th>
+                        <th>Blood Type</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                        <th>Status</th>
                     </tr>
-                <?php } ?>
+                </thead>
+                <tbody>
+                    <?php if ($donations_result->num_rows > 0) { 
+                        while ($row = $donations_result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['blood_type']); ?></td>
+                                <td><?php echo htmlspecialchars($row['no_of_units']); // Ensure this matches your database ?></td>
+                                <td><?php echo htmlspecialchars($row['donation_date']); ?></td>
+                                <td><?php echo htmlspecialchars($row['status']); ?></td>
+                            </tr>
+                        <?php } 
+                    } else { ?>
+                        <tr>
+                            <td colspan="5">No donations found.</td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
             </table>
         </div>
     </div>

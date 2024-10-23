@@ -105,8 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $donationSql = "INSERT INTO donations (donor_id, blood_type, donation_date, status) VALUES ('$donor_id', '$bloodType', NOW(), 'Pending')";
 
                 if ($conn->query($donationSql) === TRUE) {
-                    header("Location:login.php");
-                    echo "Registration successful. Login Now!";
+                    echo '<script>
+                    alert("Registration successful. Login now!");
+                    window.location.href = "login.php";
+                  </script>';
                   
                 } else {
                     echo "Error inserting into donations table: " . $conn->error;

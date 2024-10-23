@@ -135,10 +135,14 @@ if ($conn->query($sqlUser) === TRUE) {
     
     // Execute the patient query
     if ($conn->query($sqlPatient) === TRUE) {
-        echo "Registration successful.";
+        echo '<script>
+                alert("Registration successful. Login now!");
+                window.location.href = "login.php";
+              </script>';
     } else {
         echo "Error: " . $sqlPatient . "<br>" . $conn->error;
     }
+    
 } else {
     echo "Error: " . $sqlUser . "<br>" . $conn->error;
 }
