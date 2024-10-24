@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'donor') {
     exit();
 }
 
-// Fetch donor details using the user ID from the session
+// Fetch donor details using the uscer ID from the session
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT * FROM donors WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
