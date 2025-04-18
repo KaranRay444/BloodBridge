@@ -31,7 +31,7 @@
                 </div>
                 <div class="box">
                     <h3>Community Impact</h3>
-                    <p>Blood donation strengthens your community by ensuring that blood is available when needed, fostering a spirit of solidarity and care.</p>
+                    <p>Blood donation strengthens your community by ensuring that blood is available when needed, fostering a spirit of solidarity and care with cure.</p>
                 </div>
             </div>
         </div>
