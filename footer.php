@@ -15,7 +15,7 @@
         </div>
 
         <div class="quick-links">
-            <h4>Quick Links</h4>
+            <h4>Quick Links Ex</h4>
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="#about">About</a></li>
